@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../App.css";
 import { useDispatch } from "react-redux";
 import { login } from "../stores/actions/action";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const LoginPage = () => {
@@ -64,7 +64,10 @@ const LoginPage = () => {
           <button type="submit">Login</button>
         </form>
         <p>
-          Didn't have an account? <strong>Sign Up</strong>
+          Didn't have an account?{" "}
+          <Link to={"/register"}>
+            <strong>Sign Up</strong>
+          </Link>
         </p>
       </div>
     </div>

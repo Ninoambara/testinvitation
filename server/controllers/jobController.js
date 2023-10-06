@@ -6,7 +6,6 @@ class JobController {
       const { description, location, full_time, page } = req.query;
       let apiUrl = `https://dev6.dansmultipro.com/api/recruitment/positions.json?`;
 
-      // Check if any query parameters are provided
       const queryParams = [];
 
       if (description) {
@@ -25,7 +24,6 @@ class JobController {
         queryParams.push(`page=${page}`);
       }
 
-      // Add the query parameters to the URL
       apiUrl += queryParams.join("&");
 
       console.log(apiUrl);
