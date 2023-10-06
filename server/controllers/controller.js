@@ -5,31 +5,31 @@ const User = require("../models/user");
 const { createToken } = require("../helpers/jwt");
 
 class Controller {
-  static async regis(req, res) {
+  static async regis(req, res, next) {
     try {
-      const { username, email, password, phoneNumber, address } = req.body;
+      const { username, password } = req.body;
+
+      if (!username) {
+        throw { name: "username cannot empty" };
+      }
+      if (!password) {
+        throw { name: "password cannot empty" };
+      }
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const userData = {
         username,
-        email,
         password: hashedPassword,
-        phoneNumber,
-        address,
       };
 
       const result = await User.create(userData);
-      if (result.acknowledged) {
-        return res
-          .status(201)
-          .json({ message: "Pengguna berhasil ditambahkan" });
+      if (result) {
+        return res.status(201).json({ message: "New User added" });
       } else {
-        return res.status(500).json({ message: "Gagal menambahkan pengguna" });
+        throw { name: "Failed Add New User" };
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Terjadi kesalahan saat menambahkan pengguna" });
+      next(error);
     }
   }
 
@@ -63,7 +63,7 @@ class Controller {
     }
   }
 
-  static async findAll(req, res) {
+  static async findAll(req, res, next) {
     try {
       const users = await User.findAll();
       if (!users) {
@@ -73,11 +73,7 @@ class Controller {
       }
       return res.json(users);
     } catch (error) {
-      if (error.name === "user not found") {
-        res.status(400).json(error.name);
-      } else {
-        res.status(500).json("Internal server error");
-      }
+      next(error);
     }
   }
 }

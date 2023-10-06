@@ -26,12 +26,10 @@ class JobController {
 
       apiUrl += queryParams.join("&");
 
-      console.log(apiUrl);
       const response = await axios.get(apiUrl);
       res.json(response.data);
     } catch (error) {
-      console.error(error);
-      res.sendStatus(500);
+      next(error);
     }
   }
 
@@ -41,10 +39,15 @@ class JobController {
       const apiUrl = `https://dev6.dansmultipro.com/api/recruitment/positions/${jobId}`;
 
       const response = await axios.get(apiUrl);
+
+      if (Object.keys(response.data).length === 0) {
+        throw { name: "Job not found" };
+      }
+
       res.json(response.data);
     } catch (error) {
       console.error(error);
-      res.sendStatus(500);
+      next(error);
     }
   }
 }
