@@ -2,27 +2,62 @@ import axios from "axios";
 const BASE_URL = "http://localhost:3000/";
 import Swal from "sweetalert2";
 
+
+export const fetchJobsRequest = () => ({
+  type: "jobs/fetchRequest",
+});
+
 export const fetchJobsSuccess = (jobs) => ({
   type: "jobs/fetchSuccess",
+  payload: jobs,
+});
+
+export const fetchOneJobsRequest = () => ({
+  type: "jobs/fetchOneRequest",
+});
+
+export const fetchOneJobsSuccess = (jobs) => ({
+  type: "jobs/fetchOneSuccess",
   payload: jobs,
 });
 
 export const fetchJobs = (searchParams) => {
   return async (dispatch) => {
     try {
+      dispatch(fetchJobsRequest())
       const apiUrl = BASE_URL + "jobs";
 
       // console.log(searchParams);
       const queryParameters = new URLSearchParams(searchParams).toString();
       const fullUrl = `${apiUrl}?${queryParameters}`;
-      console.log(fullUrl);
+
       const response = await axios.get(fullUrl, {
         headers: {
           access_token: localStorage.getItem("access_token"),
         },
       });
-      console.log(response.data);
+
       dispatch(fetchJobsSuccess(response.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const fetchOneJobs = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchOneJobsRequest())
+      const url = BASE_URL + "jobs/" + id;
+
+      // console.log(searchParams);
+      const response = await axios.get(url, {
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      });
+
+      dispatch(fetchOneJobsSuccess(response.data));
     } catch (error) {
       console.error(error);
     }

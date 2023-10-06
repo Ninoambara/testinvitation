@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchJobs } from "../stores/actions/action";
 import formatDate from "../helpers/dateFormat";
+import { Link } from "react-router-dom";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const jobs = useSelector((state) => state.jobs.jobs);
+  const { jobs, loading } = useSelector((state) => state.jobs);
   const filteredJobs = jobs.filter((job) => job);
   const [page, setPage] = useState(1);
   const [locationFilter, setLocationFilter] = useState("");
@@ -39,11 +41,12 @@ const Home = () => {
         page: 1,
       })
     );
+    setPage(1);
   };
 
   return (
     <div className="job-list-container">
-      <h2 style={{textAlign: "center"}}>Job List</h2>
+      <h2 style={{ textAlign: "center" }}>Job List</h2>
       <div className="filter-container">
         <div className="filter-location">
           <input
@@ -81,30 +84,41 @@ const Home = () => {
           Filter
         </button>
       </div>
-      <div className="job-list">
-        {filteredJobs.map((job) => (
-          <div className="job-card" key={job.id}>
-            <div className="job-info">
-              <h3 style={{ color: "#007bff" }}>{job.title}</h3>
-              <p>
-                {job.company} -{" "}
-                <strong style={{ color: "green" }}>{job.type}</strong>
-              </p>
-            </div>
-            <div className="job-details">
-              <div>
-                <p style={{ marginBottom: -10 }}>
-                  <strong>{job.location}</strong>
+      {loading ? (
+        <div style={{ marginLeft: "40%", marginTop: 50 }}>
+          <BeatLoader color={"#007bff"} loading={loading} size={50} />
+        </div>
+      ) : (
+        <div className="job-list">
+          {filteredJobs.map((job) => (
+            <Link
+              to={`/detail/${job.id}`}
+              className="job-card"
+              key={job.id}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="job-info">
+                <h3 style={{ color: "#007bff" }}>{job.title}</h3>
+                <p>
+                  {job.company} -{" "}
+                  <strong style={{ color: "green" }}>{job.type}</strong>
                 </p>
               </div>
-              <div>
-                <p>{formatDate(job.created_at)}</p>
+              <div className="job-details">
+                <div>
+                  <p style={{ marginBottom: -10 }}>
+                    <strong>{job.location}</strong>
+                  </p>
+                </div>
+                <div>
+                  <p>{formatDate(job.created_at)}</p>
+                </div>
               </div>
-            </div>
-            {/* <button>View Details</button> */}
-          </div>
-        ))}
-      </div>
+              {/* <button>View Details</button> */}
+            </Link>
+          ))}
+        </div>
+      )}
 
       <div className="pagination">
         <button

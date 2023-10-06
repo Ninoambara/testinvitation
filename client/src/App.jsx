@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import store from "./stores";
 import Navbar from "./components/Navbar";
 import RegisterPage from "./views/RegisterPage";
+import DetailPage from "./views/DetailPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const App = () => {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/detail/:id",
+          element: <DetailPage />,
         },
       ],
     },

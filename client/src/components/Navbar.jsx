@@ -27,7 +27,7 @@ const Navbar = () => {
     <>
       <nav className="navbar">
         <div className="navbar-container">
-          <h1 className="navbar-logo">FindJob.</h1>
+          <h1 style={{cursor:"pointer"}} className="navbar-logo">FindJob.</h1>
           <ul className="navbar-menu">
             <li className="navbar-item">
               <Link to="/" className="navbar-link">
