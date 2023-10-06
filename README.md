@@ -1,4 +1,4 @@
-# API DOCUMENTASION
+# API DOCUMENTATION
 
 ### List endpoint
 
