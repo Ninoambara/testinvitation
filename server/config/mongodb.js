@@ -1,7 +1,6 @@
 const { MongoClient } = require("mongodb");
 
 // const uri = "mongodb://127.0.0.1:27017";
-// const uri = "mongodb+srv://ninoambara:IeEZqELaecn8M4Le@cluster0.wg7pw1e.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
 const uri = process.env.MONGO_URL;
 
 const dbName = "testingDB";
